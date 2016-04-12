@@ -1,0 +1,59 @@
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model TheWorld.ViewModels.WebPostViewModel
+@{
+    ViewBag.Title = "Create your WebPost!";
+}
+@section Scripts {
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}
+
+<div class="col-md-6 col-md-offset-3 col-xs-10 col-xs-offset-1">
+    <form method="post" class="well well">
+        <fieldset>
+            <legend>Criar Post</legend>
+            <div asp-validation-summary="ValidationSummary.ModelOnly"></div>
+            <div class="form-group">
+                <label> Title </label>
+                <input id="postTitle" asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-muted"></span>
+            </div>
+            <div class="form-group">
+                <label> Text </label>
+                <input id="postText" asp-for="Text" class="form-control" />
+                <span asp-validation-for="Text" class="text-muted"></span>
+            </div>
+            <div class="form-group">
+                <label> Youtube URL </label>
+                <input id="postURL" asp-for="VideoURL" class="form-control" />
+                <span asp-validation-for="VideoURL" class="text-muted"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create Post!" class="btn btn-success" />
+            </div>
+        </fieldset>
+        
+    </form>
+</div>
+<div class="col-md-6 col-md-offset-3 col-xs-10 col-xs-offset-1">
+        @Html.Partial("WebPostPartial")
+        @*<div style="margin-top:20px; background-color:#4E5D6C;">
+            <div class="webpost_date bg-dark">
+                <span class="day">@DateTime.UtcNow.Day  </span>
+                <span class="month">@DateTime.UtcNow.ToString("MMM") </span>
+                <span class="year">@DateTime.UtcNow.Year </span>
+            </div>
+            <div class="bg-primary webpost_title">
+                <h2 id="previewTitle"> </h2>
+            </div>
+            <div style="margin:10px;">
+                <span id="previewText"> </span>
+                <div class="text-center">
+                    <iframe id ="previewURL" width="420" height="315" src="" frameborder="0" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>*@
+</div>
+@*<script type="text/javascript" src="~/js/postpreview.js"></script>*@

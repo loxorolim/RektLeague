@@ -1,0 +1,126 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Za Worldo! - @ViewBag.Title </title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/bootswatch/superhero/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/font-awesome/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+
+
+</head>
+<body>
+
+    @*<div id="sidebar" style="position:fixed;">
+        <div class="pull-left" style="width: 88.7%;">
+            @if (User.Identity.IsAuthenticated)
+            {
+                <div style="text-align:center;">
+                    <span class="username_style">@User.Identity.Name</span>
+                </div>
+                <div>
+                    <div style="float:left;">
+                        <img src="~/img/heresdoge100x100.png" alt="headshot" class="headshot" />
+                    </div>
+                    <div style="width:50%; padding: 6px; height:110px; float:left;">             
+                        <ul class="nav">
+                            <li><a asp-controller="Auth" asp-action="Logout">Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div>
+                    <div style="float:left;">
+                        <img src="~/img/notloggeduser.png" alt="headshot" class="headshot" />
+                    </div>
+                    <div style="width:50%; padding: 6px;  height:110px; float:left;">
+                        <ul class="nav">
+                            <li><a asp-controller="Auth" asp-action="Login">Login</a></li>
+                            <li><a asp-controller="Auth" asp-action="SignUp">Sign up</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+
+            }
+            <div style="float:left; width:100%;">
+                <ul class="nav">
+                    <li class="active"><a asp-controller="App" asp-action="Index"> Home</a></li>
+                    <li><a asp-controller="App" asp-action="About"> About</a></li>
+                    <li><a asp-controller="App" asp-action="Contact"> Contact</a></li>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li><a asp-controller="App" asp-action="WritePost"> Write post</a></li>
+                    }
+
+                </ul>
+            </div>
+
+        </div>
+        <div class="pull-right" style="height:100vh">
+            <button id="toggle_sidebar" class="btn btn-sm btn-primary">
+                <i class="fa fa-angle-left"></i>
+            </button>
+        </div>
+    </div>*@
+    <div id="wrapper">
+        <div class="banner">
+            
+            @*<div class="embed-responsive embed-responsive-16by9">
+                <iframe class="embed-responsive-item" src="~/img/Rocket-League-I.jpg"></iframe>
+            </div>*@
+            
+            @*<img src="~/img/rektleaguebanner.png" style="width:100%;height:100%;" />*@
+            <div class="bg-dark text-center" style="position:absolute; right:0; top:0; height:250px;">
+                <ul class="nav">
+                    @if (User.Identity.IsAuthenticated){
+                        <li><span class="username_style">@User.Identity.Name</span></li>
+                        <li><img src="~/img/heresdoge100x100.png" alt="headshot" class="headshot" /></li> 
+                        <li><a asp-controller="Auth" asp-action="Logout" class="fa fa-sign-out"> Logout</a></li>
+                        <li><a asp-controller="App" asp-action="UserSettings" class="fa fa-cog"> Settings</a></li>
+                    }
+                    else
+                    {
+                        <li><img src="~/img/notloggeduser.png" alt="headshot" class="headshot" /></li>
+                        <li><a asp-controller="Auth" asp-action="Login" class="fa fa-sign-in"> Login</a></li>
+                        <li><a asp-controller="Auth" asp-action="SignUp" class="fa fa-user-plus"> Sign up</a></li>
+                    }
+                </ul>             
+            </div>
+        </div>
+        <div id="menubar">
+            @Html.Partial("HorizontalNavbar")
+        </div>
+        <div id="main">
+            <div>
+                @RenderBody()
+            </div>
+        </div>
+        <div id="footer" class="container-fluid">
+            <div class="navbar navbar-default navbar-fixed-bottom" style="z-index:-1;">
+                <h4 class="text-center"> &copy; 2016 Rekt League Ltd. </h4>
+            </div>
+
+        </div>
+    </div>
+    <script type="text/javascript" src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="~/js/sidebar.js"></script>
+    <script type="text/javascript" src="~/js/postpreview.js"></script>
+    <script type="text/javascript" src="~/js/jquery.fittext.js"></script>
+    <script type="text/javascript" src="~/js/WebPostPartial.js"></script>
+
+    @RenderSection("Scripts", false)
+
+</body>
+
+
+
+
+
+
+
+</html>

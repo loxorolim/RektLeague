@@ -1,0 +1,140 @@
+﻿@model TheWorld.Models.WebPostList
+@{
+    ViewBag.Title = "Home Page";
+    int currentPage = Convert.ToInt32(ViewContext.RouteData.Values["id"]);
+    int paginationMax = 5;
+    int lastpage = (int)Math.Ceiling((double)Model.TotalWebPostsSize / Model.MaxWebPostsPerSize);
+
+}
+@functions {
+
+}
+
+<head>
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+
+@*<div class="col-md-4">
+        <h2>Za Woooolrdo</h2>
+        <p>TEEEESTE</p>
+        <form>
+            <div class="form-group">
+                <label>Date</label>
+                <input class="form-control" />
+            </div>
+            <div class="form-group">
+                <label> Location</label>
+                <input class="form-control" />
+            </div>
+            <div><input type="submit" value="Add" class="btn btn-success" /></div>
+        </form>
+    </div>*@
+<div class="container">
+
+    @foreach (var post in Model.WebPosts)
+    {
+        <div class="col-md-8 col-md-offset-2 col-xs-10 col-xs-offset-1">
+            @Html.Partial("WebPostPartial", post)
+        </div>
+
+        @*<div class="row">
+            <div class="col-md-8 col-md-offset-2 col-xs-10 col-xs-offset-1">
+                <div style="margin-top:20px; background-color:#4E5D6C;">
+
+                    <div class="webpost_date bg-dark">
+                        <span class="day">@post.PublicationDate.Day</span>
+                        <span class="month">@post.PublicationDate.ToString("MMM")</span>
+                        <span class="year">@post.PublicationDate.Year</span>
+                    </div>
+                    <div class="bg-primary webpost_title">
+                        <h2>@post.Title</h2>
+                    </div>
+                    @if (User.Identity.IsAuthenticated){
+                        <a class="webpost_remove btn btn-danger text-center" asp-controller="App" asp-action="RemovePost" asp-route-id=@post.Id>X</a>
+                    }
+
+
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2 col-xs-10 col-xs-offset-1">
+                <div class="panel panel-default" style="margin:0 10px 10px 10px;">
+                    <div class="well-lg">
+                        <span>@post.Text</span>
+                    </div>
+                    <div class="well">
+                        <div class="text-center">
+                            <div class="embed-responsive embed-responsive-4by3">
+                                <iframe width="420" height="315" src=@post.VideoURL frameborder="0" allowfullscreen></iframe>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+           
+        </div>*@
+    }
+    @* int current_page;*@
+
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2 col-xs-10 col-xs-offset-1">
+            <div class="text-center">
+                <ul class="pagination pagination-sm">
+                    @{
+                        if (currentPage == 1)
+                        {
+                            <li class="disabled"><a href="#">&laquo;</a></li>
+                        }
+                        else {
+                            <li><a asp-controller="App" asp-action="webposts" asp-route-id=1>&laquo;</a></li>
+                        }
+                    }
+                    @{
+                        int minPagination = (int)Math.Ceiling((double)Model.TotalWebPostsSize / Model.MaxWebPostsPerSize);
+                        int aux = (int)Math.Min(paginationMax, minPagination);
+                        int aux2 = (int)Math.Floor((double)aux / 2);
+                        int startingPoint = currentPage - aux2;
+                        int aux3 = lastpage - currentPage;
+                        if (aux3 < aux2)
+                        {
+                            startingPoint -= aux2 - aux3;
+                        }
+                        while (aux > 0)
+                        {
+                            if (startingPoint >= 1)
+                            {
+                                if (@startingPoint == currentPage)
+                                {
+                                    <li class="active"><a asp-controller="App" asp-action="webposts" asp-route-id=@startingPoint>@startingPoint</a></li>
+                                }
+                                else {
+                                    <li><a asp-controller="App" asp-action="webposts" asp-route-id=@startingPoint>@startingPoint</a></li>
+                                }
+                                aux--;
+                            }
+                            startingPoint++;
+                        }
+                    }
+                    @{
+                        if (currentPage == lastpage)
+                        {
+                            <li class="disabled"><a href="#">&raquo;</a></li>
+                        }
+                        else {
+                            <li><a asp-controller="App" asp-action="webposts" asp-route-id=@lastpage>&raquo;</a></li>
+                        }
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
