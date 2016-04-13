@@ -85,9 +85,12 @@ namespace TheWorld.Controllers.Web
         }
         [Authorize]
         [HttpPost]
-        public IActionResult UserSettings(SignUpViewModel model)
+        public IActionResult UserSettings(UserSettingsViewModel model)
         {
-            return View();
+            if (ModelState.IsValid)
+            {
+            }
+                return View();
         }
 
     }
