@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System;
+using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace TheWorld.Models
@@ -28,10 +31,15 @@ namespace TheWorld.Models
             if (await _userManager.FindByEmailAsync("doge@wow.com") == null)
             {
                 //Add user
+
+                byte[] imageBytes = File.ReadAllBytes("C:\\Users\\Guilherme\\Source\\Repos\\RektLeague\\src\\TheWorld\\wwwroot\\img\\heresdoge100x100.png");
+
+
                 var newUser = new WorldUser()
                 {
                     UserName = "doge",
-                    Email = "doge@wow.com"
+                    Email = "doge@wow.com",
+                    Image = imageBytes
                     
                 };              
                 await _userManager.CreateAsync(newUser, "V3ry!p4ssw0rd");

@@ -6,16 +6,23 @@ using Microsoft.AspNet.Authorization;
 using TheWorld.ViewModels;
 using AutoMapper;
 using System.Net;
+using Microsoft.AspNet.Http;
+using System.IO;
+using Microsoft.Net.Http.Headers;
+using Microsoft.AspNet.Identity;
+using System.Threading.Tasks;
 
 namespace TheWorld.Controllers.Web
 {
     public class AppController : Controller
     {
         private IWebPostRepository _repository;
+        private UserManager<WorldUser> _userManager;
 
-        public AppController(IWebPostRepository context)
+        public AppController(IWebPostRepository context, UserManager<WorldUser> userManager)
         {
             _repository = context;
+            _userManager = userManager;
         }
         public IActionResult Index()
         {
@@ -85,13 +92,60 @@ namespace TheWorld.Controllers.Web
         }
         [Authorize]
         [HttpPost]
-        public IActionResult UserSettings(UserSettingsViewModel model)
+        public async Task<IActionResult> UserSettings(UserSettingsViewModel model)
         {
+
+            IFormFile img = model.Image;
+            Stream stream = img.OpenReadStream();
+            byte[] imgBytes;
+            using (var memoryStream = new MemoryStream())
+            {
+                stream.CopyTo(memoryStream);
+                imgBytes = memoryStream.ToArray();
+            }
+            WorldUser toModify = await _userManager.FindByNameAsync(User.Identity.Name);
+            
+            if (toModify != null)
+            {
+                toModify.Image = imgBytes;
+                await _userManager.UpdateAsync(toModify);
+                
+            }
+
+
+            //using (var reader = new StreamReader(img.OpenReadStream()))
+            //{
+            //    var fileContent = reader.ReadToEnd();
+            //    var parsedContentDisposition = ContentDispositionHeaderValue.Parse(img.ContentDisposition);
+            //    var fileName = parsedContentDisposition.FileName;
+            //    var content = parsedContentDisposition.
+            //}
+
+
             if (ModelState.IsValid)
             {
             }
-                return View();
+            return View();
         }
+        //public static byte[] CreateImage(Stream imageStream, int width, int height)
+        //{
+        //    Bitmap original = null;
+        //    original = Bitmap.FromStream(imageStream) as Bitmap;
+
+        //    var img = new Bitmap(width, height);
+
+        //    using (var g = Graphics.FromImage(img))
+        //    {
+        //        g.SmoothingMode = SmoothingMode.AntiAlias;
+        //        g.InterpolationMode = InterpolationMode.HighQualityBicubic;
+        //        g.DrawImage(original, new Rectangle(0, 0, width, height), 0, 0, original.Width, original.Height, GraphicsUnit.Pixel);
+        //    }
+
+        //    var stream = new MemoryStream();
+        //    img.Save(stream, ImageFormat.Png);
+
+        //    return stream.ToArray();
+        //}
 
     }
 

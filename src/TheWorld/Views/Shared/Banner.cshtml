@@ -1,0 +1,30 @@
+﻿@inject AspNetIdentity.Services.UserProfile UserProfile
+@*<div class="embed-responsive embed-responsive-16by9">
+        <iframe class="embed-responsive-item" src="~/img/Rocket-League-I.jpg"></iframe>
+    </div>*@
+
+@*<img src="~/img/rektleaguebanner.png" style="width:100%;height:100%;" />*@
+<div class="bg-dark text-center" style="position:absolute; right:0; top:0; height:250px;">
+    <ul class="nav">
+        @if (User.Identity.IsAuthenticated)
+        {
+            var imgByteArray = await UserProfile.Image(User.Identity.Name);
+            var imgSrc = "~/img/notloggeduser.png";
+            if (imgByteArray != null)
+            {
+                var base64 = Convert.ToBase64String(imgByteArray);
+                imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+            }
+            <li><span class="username_style">@User.Identity.Name</span></li>
+            <li><img src="@imgSrc" alt="headshot" class="headshot" /></li>
+            <li><a asp-controller="Auth" asp-action="Logout" class="fa fa-sign-out"> Logout</a></li>
+            <li><a asp-controller="App" asp-action="UserSettings" class="fa fa-cog"> Settings</a></li>
+        }
+        else
+        {
+            <li><img src="~/img/notloggeduser.png" alt="headshot" class="headshot" /></li>
+            <li><a asp-controller="Auth" asp-action="Login" class="fa fa-sign-in"> Login</a></li>
+            <li><a asp-controller="Auth" asp-action="SignUp" class="fa fa-user-plus"> Sign up</a></li>
+        }
+    </ul>
+</div>

@@ -17,6 +17,7 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.Authentication.Cookies;
 using System.Net;
+using AspNetIdentity.Services;
 
 namespace TheWorld
 {
@@ -74,6 +75,7 @@ namespace TheWorld
                 .AddSqlServer()
                 .AddDbContext<WebPostContext>();
             services.AddTransient<WebPostContextSeedData>();
+            services.AddTransient<UserProfile>();
             services.AddScoped<IWebPostRepository, WebPostRepository>();
         }
 
