@@ -1,5 +1,5 @@
 ﻿@model TheWorld.ViewModels.LoginViewModel
-@{ 
+@{
     ViewBag.Title = "Login";
 }
 @section Scripts {
@@ -7,18 +7,34 @@
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
 }
 <div class="row">
-    <div class="col-sm-6 col-sm-offset-3">
+    <div class="col-sm-6 col-sm-offset-3 well well">
         <h3>Login</h3>
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div class="alert alert-dismissible alert-danger">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <div asp-validation-summary="ValidationSummary.ModelOnly"></div>
+                @* Mostra todos os erros, poderia ser substituido pra verificar só o de password, q é o que interessa. *@
+                @*@foreach (var modelState in ViewData.ModelState.Values)
+                {
+                    foreach (var error in modelState.Errors)
+                    {
+                        <span>@error.ErrorMessage</span>
+                    }
+                }*@              
+            </div>
+        }
+
         <form method="post" novalidate>
             <div class="form-group">
                 <label asp-for="Username"></label>
                 <input asp-for="Username" class="form-control" />
-                <span asp-validation-for="Username"></span>
+                <span asp-validation-for="Username" class="text-warning"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Password"></label>
-                <input type = "password" asp-for="Password" class="form-control" />
-                <span asp-validation-for="Password"></span>
+                <input type="password" asp-for="Password" class="form-control" />
+                <span asp-validation-for="Password" class="text-warning"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Login" class="btn btn-success" />

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -62,66 +63,98 @@ namespace TheWorld.Models
                 {
                     Title = "Primeiro Post Teste",
                     PublicationDate = DateTime.UtcNow,
-                    Text = "Olá amiguinhos!",
+                    MainText = "Olá amiguinhos!",
                     Author = "doge",
-                    VideoURL = "https://www.youtube.com/embed/tmJ0tzAZ4aM"
+                    VideoURL = "https://www.youtube.com/embed/tmJ0tzAZ4aM",
+                    //Texts = new List<PostText>{
+                    //    new PostText() {PostString="Very Wow" },
+                    //    new PostText() {PostString="Much lol" }
+                    //}
+                    
+                    
+                    
+
                 };
+                byte[] image = System.IO.File.ReadAllBytes("C:\\Users\\Guilherme\\Source\\Repos\\RektLeague\\src\\TheWorld\\wwwroot\\img\\heresdoge.jpg");
+                byte[] gif = System.IO.File.ReadAllBytes("C:\\Users\\Guilherme\\Source\\Repos\\RektLeague\\src\\TheWorld\\wwwroot\\gif\\oraora.gif");
+                byte[] video = System.IO.File.ReadAllBytes("C:\\Users\\Guilherme\\Source\\Repos\\RektLeague\\src\\TheWorld\\wwwroot\\video\\SubWooferDaZoeira.mp4");
                 var WebPost2 = new WebPost()
                 {
                     Title = "GET BIRDED!!!",
                     PublicationDate = DateTime.UtcNow,
-                    Text = "Este é um post teste! Se liguem na birdada no vídeo abaixo! GET REKT!!!!!",
+                    Elements = new List<Entry>
+                    {
+                        new Entry() {ElementType=Entry.EntryType.Text, PostString="Very Test" },
+                        new Entry() {ElementType=Entry.EntryType.Image, PostBytes = image },
+                        new Entry() {ElementType=Entry.EntryType.Text, PostString="Much Wow" },
+                        new Entry() {ElementType=Entry.EntryType.Image, PostBytes = gif },
+                        new Entry() {ElementType=Entry.EntryType.YoutubeURL, PostString="https://www.youtube.com/embed/SRmj_VdLIL8"},
+                        
+
+                    },
+                    //MainText = "Este é um post teste! Se liguem na birdada no vídeo abaixo! GET REKT!!!!!",
                     Author = "doge",
-                    VideoURL = "https://www.youtube.com/embed/SRmj_VdLIL8"
+                    //VideoURL = "https://www.youtube.com/embed/SRmj_VdLIL8"
                 };
-                var WebPost3 = new WebPost()
-                {
-                    Title = "NOSSA SINHOOOOOOOORA!",
-                    PublicationDate = DateTime.UtcNow,
-                    Text = "Viradinha BR épica!",
-                    Author = "doge",
-                    VideoURL = "https://www.youtube.com/embed/WNDabV23cRo"
-                };
-                var WebPost4 = new WebPost()
-                {
-                    Title = "DOUBLE SAVURUUUUUU",
-                    PublicationDate = DateTime.UtcNow,
-                    Text = "BORA CUMPADI!",
-                    Author = "doge",
-                    VideoURL = "https://www.youtube.com/embed/vLiv3yabEjQ"
-                };
-                var WebPost5 = new WebPost()
-                {
-                    Title = "DIBRE DUPLO",
-                    PublicationDate = DateTime.UtcNow,
-                    Text = "GET DIBRED",
-                    Author = "doge",
-                    VideoURL = "https://www.youtube.com/embed/5O0Fj6gmkIs"
-                };
-                var WebPost6 = new WebPost()
-                {
-                    Title = "TOP GOALS!",
-                    PublicationDate = DateTime.UtcNow,
-                    Text = "Se liguem nesses TOP GOALS!",
-                    Author = "doge",
-                    VideoURL = "https://www.youtube.com/embed/DKhAGtosZgo"
-                };
-                var WebPost7 = new WebPost()
-                {
-                    Title = "GET PELICANED",
-                    PublicationDate = DateTime.UtcNow,
-                    Text = "RANGARIA!",
-                    Author = "doge",
-                    VideoURL = "https://www.youtube.com/embed/0b4TU_R7J3c"
-                };
+                //var WebPost3 = new WebPost()
+                //{
+                //    Title = "NOSSA SINHOOOOOOOORA!",
+                //    PublicationDate = DateTime.UtcNow,
+                //    MainText = "Viradinha BR épica!",
+                //    Author = "doge",
+                //    VideoURL = "https://www.youtube.com/embed/WNDabV23cRo"
+                //};
+                //var WebPost4 = new WebPost()
+                //{
+                //    Title = "DOUBLE SAVURUUUUUU",
+                //    PublicationDate = DateTime.UtcNow,
+                //    MainText = "BORA CUMPADI!",
+                //    Author = "doge",
+                //    VideoURL = "https://www.youtube.com/embed/vLiv3yabEjQ"
+                //};
+                //var WebPost5 = new WebPost()
+                //{
+                //    Title = "DIBRE DUPLO",
+                //    PublicationDate = DateTime.UtcNow,
+                //    MainText = "GET DIBRED",
+                //    Author = "doge",
+                //    VideoURL = "https://www.youtube.com/embed/5O0Fj6gmkIs"
+                //};
+                //var WebPost6 = new WebPost()
+                //{
+                //    Title = "TOP GOALS!",
+                //    PublicationDate = DateTime.UtcNow,
+                //    MainText = "Se liguem nesses TOP GOALS!",
+                //    Author = "doge",
+                //    VideoURL = "https://www.youtube.com/embed/DKhAGtosZgo"
+                //};
+                //var WebPost7 = new WebPost()
+                //{
+                //    Title = "GET PELICANED",
+                //    PublicationDate = DateTime.UtcNow,
+                //    MainText = "RANGARIA!",
+                //    Author = "doge",
+                //    VideoURL = "https://www.youtube.com/embed/0b4TU_R7J3c"
+                //};
+
 
                 _context.WebPosts.Add(WebPost1);
-                _context.WebPosts.Add(WebPost2);
-                _context.WebPosts.Add(WebPost3);
-                _context.WebPosts.Add(WebPost4);
-                _context.WebPosts.Add(WebPost5);
-                _context.WebPosts.Add(WebPost6);
-                _context.WebPosts.Add(WebPost7);
+
+                try
+                {
+                    _context.WebPosts.Add(WebPost2);
+                    _context.Entries.AddRange(WebPost2.Elements);
+                }
+                catch(Exception ex)
+                {
+
+                }
+
+                //_context.WebPosts.Add(WebPost3);
+                //_context.WebPosts.Add(WebPost4);
+                //_context.WebPosts.Add(WebPost5);
+                //_context.WebPosts.Add(WebPost6);
+                //_context.WebPosts.Add(WebPost7);
 
                 _context.SaveChanges();
             }

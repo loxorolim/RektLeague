@@ -3,9 +3,11 @@ using Microsoft.AspNet.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using TheWorld.Models;
 using TheWorld.ViewModels;
+using System.Net.Http;
 
 namespace TheWorld.Controllers
 {
@@ -20,6 +22,7 @@ namespace TheWorld.Controllers
             _userManager= userManager;
 
         }
+        [HttpGet]
         public IActionResult Login()
         {
             if (User.Identity.IsAuthenticated)
@@ -46,7 +49,7 @@ namespace TheWorld.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError("", "Username or password incorrect");
+                    ModelState.AddModelError("", "Login ou/e password incorreto(s)");
                 }
             }
             return View();
@@ -61,16 +64,33 @@ namespace TheWorld.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (await _userManager.FindByEmailAsync(model.Email) == null)
+                if(model.Password == model.PasswordConfirmation)
                 {
-                    //Add user
-                    var newUser = new WorldUser()
+                    bool loginVerification = (await _userManager.FindByNameAsync(model.Login) == null);
+                    bool emailVerification = (await _userManager.FindByEmailAsync(model.Email) == null);
+                    if (loginVerification && emailVerification)
                     {
-                        UserName = model.Login,
-                        Email = model.Email
-                    };
-                    await _userManager.CreateAsync(newUser, model.Password);
+                        //Add user
+                        var newUser = new WorldUser()
+                        {
+                            UserName = model.Login,
+                            Email = model.Email
+                        };
+                        await _userManager.CreateAsync(newUser, model.Password);
+                    }
+                    else
+                    {
+                        if(!loginVerification)
+                            ModelState.AddModelError("", "Login já existente");
+                        if(!emailVerification)
+                            ModelState.AddModelError("", "E-mail já existente");
+                    }
                 }
+                else
+                {
+                    ModelState.AddModelError("", "Password e confirmação de password diferem");
+                }
+   
             }
             return View();
         }

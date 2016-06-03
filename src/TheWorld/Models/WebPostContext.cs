@@ -10,7 +10,14 @@ namespace TheWorld.Models
         {
             Database.EnsureCreated();
         }
-        public DbSet<WebPost> WebPosts { get; set; }  
+        public DbSet<WebPost> WebPosts { get; set; }
+        public DbSet<Entry> Entries { get; set; }
+
+        //protected override void OnModelCreating(ModelBuilder modelBuilder)
+        //{
+        //    modelBuilder.Entity<PostFile>();
+        //    modelBuilder.Entity<PostText>();
+        //}
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             var connString = Startup.Configuration["Data:WebPostContextConnection"];

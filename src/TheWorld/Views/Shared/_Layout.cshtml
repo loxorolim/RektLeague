@@ -9,67 +9,19 @@
     <link rel="stylesheet" href="~/lib/bootswatch/superhero/bootstrap.min.css" />
     <link rel="stylesheet" href="~/lib/font-awesome/css/font-awesome.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/WritePost.css" />
+    @*<link rel="stylesheet" href="~/css/jquery-ui.min.css" />*@
+    @*<link rel="stylesheet" href="~/css/jquery-ui.structure.min.css" />
+    <link rel="stylesheet" href="~/css/jquery-ui.theme.min.css" />*@
+    
+    
 
 
 </head>
 <body>
-
-    @*<div id="sidebar" style="position:fixed;">
-        <div class="pull-left" style="width: 88.7%;">
-            @if (User.Identity.IsAuthenticated)
-            {
-                <div style="text-align:center;">
-                    <span class="username_style">@User.Identity.Name</span>
-                </div>
-                <div>
-                    <div style="float:left;">
-                        <img src="~/img/heresdoge100x100.png" alt="headshot" class="headshot" />
-                    </div>
-                    <div style="width:50%; padding: 6px; height:110px; float:left;">             
-                        <ul class="nav">
-                            <li><a asp-controller="Auth" asp-action="Logout">Logout</a></li>
-                        </ul>
-                    </div>
-                </div>
-            }
-            else
-            {
-                <div>
-                    <div style="float:left;">
-                        <img src="~/img/notloggeduser.png" alt="headshot" class="headshot" />
-                    </div>
-                    <div style="width:50%; padding: 6px;  height:110px; float:left;">
-                        <ul class="nav">
-                            <li><a asp-controller="Auth" asp-action="Login">Login</a></li>
-                            <li><a asp-controller="Auth" asp-action="SignUp">Sign up</a></li>
-                        </ul>
-                    </div>
-                </div>
-
-
-            }
-            <div style="float:left; width:100%;">
-                <ul class="nav">
-                    <li class="active"><a asp-controller="App" asp-action="Index"> Home</a></li>
-                    <li><a asp-controller="App" asp-action="About"> About</a></li>
-                    <li><a asp-controller="App" asp-action="Contact"> Contact</a></li>
-                    @if (User.Identity.IsAuthenticated)
-                    {
-                        <li><a asp-controller="App" asp-action="WritePost"> Write post</a></li>
-                    }
-
-                </ul>
-            </div>
-
-        </div>
-        <div class="pull-right" style="height:100vh">
-            <button id="toggle_sidebar" class="btn btn-sm btn-primary">
-                <i class="fa fa-angle-left"></i>
-            </button>
-        </div>
-    </div>*@
     <div id="wrapper">
         <div class="banner">
+            <a asp-controller="App" asp-action="WebPosts" asp-route-id="1" class="fill-div"></a>
             @Html.Partial("Banner")
         </div>
         <div id="menubar">
@@ -80,20 +32,23 @@
                 @RenderBody()
             </div>
         </div>
-        <div id="footer" class="container-fluid">
-            <div class="navbar navbar-default navbar-fixed-bottom" style="z-index:-1;">
+        @*<div id="footer" class="container-fluid">
+            <div class="navbar navbar-default navbar-fixed-bottom">
                 <h4 class="text-center"> &copy; 2016 Rekt League Ltd. </h4>
             </div>
 
-        </div>
+        </div>*@
     </div>
+    <script type="text/javascript" src="~/lib/knockoutjs/dist/knockout.js"></script>
     <script type="text/javascript" src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="~/js/jquery-ui.min.js"></script>
     <script type="text/javascript" src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="~/js/sidebar.js"></script>
-    <script type="text/javascript" src="~/js/postpreview.js"></script>
     <script type="text/javascript" src="~/js/jquery.fittext.js"></script>
     <script type="text/javascript" src="~/js/WebPostPartial.js"></script>
     <script type="text/javascript" src="~/js/UserSettings.js"></script>
+    <script type="text/javascript" src="~/js/WritePost.js"></script>
+   
     @RenderSection("Scripts", false)
 
 </body>

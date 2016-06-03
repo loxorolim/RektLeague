@@ -10,7 +10,7 @@ namespace TheWorld.ViewModels
     public class SignUpViewModel
     {
         [Required]
-        [StringLength(20, MinimumLength = 5)]
+        [StringLength(20, MinimumLength = 4)]
         public string Login { get; set; }
         [Required]
         [EmailAddress]

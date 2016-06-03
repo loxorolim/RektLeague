@@ -11,6 +11,7 @@ using System.IO;
 using Microsoft.Net.Http.Headers;
 using Microsoft.AspNet.Identity;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace TheWorld.Controllers.Web
 {
@@ -18,17 +19,24 @@ namespace TheWorld.Controllers.Web
     {
         private IWebPostRepository _repository;
         private UserManager<WorldUser> _userManager;
+        private WebPostBR _webPostBr;
 
-        public AppController(IWebPostRepository context, UserManager<WorldUser> userManager)
+        public AppController(IWebPostRepository context, UserManager<WorldUser> userManager, WebPostBR webPostBr)
         {
             _repository = context;
             _userManager = userManager;
+            _webPostBr = webPostBr;
         }
         public IActionResult Index()
         {
             return View();
         }
-
+        public IActionResult WebPost(int id)
+        {
+            //  var web_posts = _repository.GetWebPostsInPage(id);
+            var web_post = _repository.GetWebPostById(id);
+            return View(web_post);
+        }
         public IActionResult WebPosts(int id)
         {
             //  var web_posts = _repository.GetWebPostsInPage(id);
@@ -46,24 +54,29 @@ namespace TheWorld.Controllers.Web
         {
             if (ModelState.IsValid)
             {
-                try
+                if(_webPostBr.AddWebPost(model))
                 {
-                    var newWebPost = Mapper.Map<WebPost>(model);
-                    _repository.AddWebPost(newWebPost);
-
-                    if (_repository.SaveAll())
-                    {
-                        Response.StatusCode = (int)HttpStatusCode.Created;
-                        return RedirectToAction("WebPosts", "App", new { id = 1 });
-                        //return Json(Mapper.Map<WebPostViewModel>(newWebPost));
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    Response.StatusCode = (int)HttpStatusCode.Created;
                     return RedirectToAction("WebPosts", "App", new { id = 1 });
-                    // return Json(new { Message = ex.Message });
                 }
+                //try
+                //{
+                //    var newWebPost = Mapper.Map<WebPost>(model);
+                //    _repository.AddWebPost(newWebPost);
+
+                //    if (_repository.SaveAll())
+                //    {
+                //        Response.StatusCode = (int)HttpStatusCode.Created;
+                //        return RedirectToAction("WebPosts", "App", new { id = 1 });
+                //        //return Json(Mapper.Map<WebPostViewModel>(newWebPost));
+                //    }
+                //}
+                //catch (Exception ex)
+                //{
+                //    Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                //    return RedirectToAction("WebPosts", "App", new { id = 1 });
+                //    // return Json(new { Message = ex.Message });
+                //}
 
             }
             Response.StatusCode = (int)HttpStatusCode.BadRequest;
@@ -72,6 +85,7 @@ namespace TheWorld.Controllers.Web
         [Authorize]
         public IActionResult WritePost()
         {
+            ViewBag.CategoryNames = Config.categoryNames;
             return View();
         }
         [Authorize]
@@ -85,6 +99,7 @@ namespace TheWorld.Controllers.Web
         {
             return View();
         }
+        [Authorize]
         [HttpGet]
         public IActionResult UserSettings()
         {
@@ -94,23 +109,29 @@ namespace TheWorld.Controllers.Web
         [HttpPost]
         public async Task<IActionResult> UserSettings(UserSettingsViewModel model)
         {
+            if(ModelState.IsValid)
+            {
+                IFormFile img = model.Image;
+                if(img!=null)
+                {
+                    Stream stream = img.OpenReadStream();
+                    byte[] imgBytes;
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        stream.CopyTo(memoryStream);
+                        imgBytes = memoryStream.ToArray();
+                    }
+                    WorldUser toModify = await _userManager.FindByNameAsync(User.Identity.Name);
 
-            IFormFile img = model.Image;
-            Stream stream = img.OpenReadStream();
-            byte[] imgBytes;
-            using (var memoryStream = new MemoryStream())
-            {
-                stream.CopyTo(memoryStream);
-                imgBytes = memoryStream.ToArray();
+                    if (toModify != null)
+                    {
+                        toModify.Image = imgBytes;
+                        await _userManager.UpdateAsync(toModify);
+                    }
+                }
+
             }
-            WorldUser toModify = await _userManager.FindByNameAsync(User.Identity.Name);
-            
-            if (toModify != null)
-            {
-                toModify.Image = imgBytes;
-                await _userManager.UpdateAsync(toModify);
-                
-            }
+
 
 
             //using (var reader = new StreamReader(img.OpenReadStream()))
@@ -121,10 +142,6 @@ namespace TheWorld.Controllers.Web
             //    var content = parsedContentDisposition.
             //}
 
-
-            if (ModelState.IsValid)
-            {
-            }
             return View();
         }
         //public static byte[] CreateImage(Stream imageStream, int width, int height)
@@ -147,6 +164,8 @@ namespace TheWorld.Controllers.Web
         //    return stream.ToArray();
         //}
 
+
     }
+
 
 }

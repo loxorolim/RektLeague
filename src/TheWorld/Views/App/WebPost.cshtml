@@ -1,0 +1,35 @@
+@model TheWorld.Models.WebPost
+@{
+    ViewBag.Title = Model.Title;
+    var absUrl = Context.Request.Host + Context.Request.Path;
+
+}
+<script>
+    (function (d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.6";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+<div class="container">
+    <div class="col-md-8 col-md-offset-2 col-xs-10 col-xs-offset-1">
+        <div class="row">
+            @Html.Partial("WebPostPartial", Model)
+        </div>
+        <div class="row">
+            <div class="well well">
+                <div class="well well-sm" style="background-color:white;">
+                    <div class="fb-comments" data-href="@absUrl" data-numposts="5"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+

@@ -8,8 +8,8 @@ using TheWorld.Models;
 namespace TheWorld.Migrations
 {
     [DbContext(typeof(WebPostContext))]
-    [Migration("20160330142512_IdentityEntities")]
-    partial class IdentityEntities
+    [Migration("20160602130847_InitialDatabase")]
+    partial class InitialDatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -99,18 +99,42 @@ namespace TheWorld.Migrations
                     b.HasAnnotation("Relational:TableName", "AspNetUserRoles");
                 });
 
+            modelBuilder.Entity("TheWorld.Models.Entry", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("DisplayOrder");
+
+                    b.Property<int>("ElementType");
+
+                    b.Property<byte[]>("PostBytes");
+
+                    b.Property<string>("PostString");
+
+                    b.Property<int>("WebPostId");
+
+                    b.HasKey("Id");
+                });
+
             modelBuilder.Entity("TheWorld.Models.WebPost", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("Author");
+
+                    b.Property<int>("Category");
+
+                    b.Property<string>("MainText");
+
                     b.Property<DateTime>("PublicationDate");
 
-                    b.Property<string>("Text");
+                    b.Property<string>("SecondaryText");
 
                     b.Property<string>("Title");
 
-                    b.Property<string>("UserName");
+                    b.Property<string>("VideoURL");
 
                     b.HasKey("Id");
                 });
@@ -129,7 +153,7 @@ namespace TheWorld.Migrations
 
                     b.Property<bool>("EmailConfirmed");
 
-                    b.Property<DateTime>("FirstWebPost");
+                    b.Property<byte[]>("Image");
 
                     b.Property<bool>("LockoutEnabled");
 
@@ -195,6 +219,13 @@ namespace TheWorld.Migrations
                     b.HasOne("TheWorld.Models.WorldUser")
                         .WithMany()
                         .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("TheWorld.Models.Entry", b =>
+                {
+                    b.HasOne("TheWorld.Models.WebPost")
+                        .WithMany()
+                        .HasForeignKey("WebPostId");
                 });
         }
     }

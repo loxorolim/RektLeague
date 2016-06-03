@@ -15,7 +15,7 @@
                 var base64 = Convert.ToBase64String(imgByteArray);
                 imgSrc = String.Format("data:image/gif;base64,{0}", base64);
             }
-            <li><span class="username_style">@User.Identity.Name</span></li>
+            <li><div class="username_style" resize>@User.Identity.Name</div></li>
             <li><img src="@imgSrc" alt="headshot" class="headshot" /></li>
             <li><a asp-controller="Auth" asp-action="Logout" class="fa fa-sign-out"> Logout</a></li>
             <li><a asp-controller="App" asp-action="UserSettings" class="fa fa-cog"> Settings</a></li>

@@ -1,4 +1,4 @@
-﻿
+﻿@inject AspNetIdentity.Services.UserProfile UserProfile
 @model TheWorld.ViewModels.UserSettingsViewModel
 @{
     ViewBag.Title = "Configurações";
@@ -26,7 +26,17 @@
             </div>
             <div class="col-md-6 col-xs-6">
                 <div class="form-group text-center">
-                    <img src="~/img/heresdoge100x100.png" alt="Imagem" class="headshot" />
+                @if (User.Identity.IsAuthenticated)
+                {
+                    var imgByteArray = await UserProfile.Image(User.Identity.Name);
+                    var imgSrc = "~/img/notloggeduser.png";
+                    if (imgByteArray != null)
+                    {
+                    var base64 = Convert.ToBase64String(imgByteArray);
+                    imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+                    }
+                    <img id="imagePreview" src="@imgSrc" alt="Imagem" class="headshot" />
+                }             
                 </div>
                 <div class="form-group-sm" style="margin-bottom:15px;">
                     <label class="btn btn-primary btn-sm fa fa-upload" style="height:30px;" for="my-file-selector">
@@ -37,9 +47,9 @@
                     </div>
 
                 </div>
-                <div class="form-group text-center">
+                @*<div class="form-group text-center">
                     <button class="btn btn-success btn-sm" type="button">Alterar Imagem</button>
-                </div>
+                </div>*@
             </div>
         </fieldset>
 

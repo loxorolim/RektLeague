@@ -9,51 +9,77 @@
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
 }
+<div class="container-fluid">
+    <form method="post" enctype="multipart/form-data">
+        <div class="row">
+            <div class="col-md-4 col-md-offset-1 col-xs-4 col-xs-offset-0 well well">
 
-<div class="col-md-6 col-md-offset-3 col-xs-10 col-xs-offset-1">
-    <form method="post" class="well well">
-        <fieldset>
-            <legend>Criar Post</legend>
-            <div asp-validation-summary="ValidationSummary.ModelOnly"></div>
-            <div class="form-group">
-                <label> Title </label>
-                <input id="postTitle" asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-muted"></span>
+                <fieldset>
+                    <legend>Criar Post</legend>
+                    <div asp-validation-summary="ValidationSummary.ModelOnly"></div>
+                    <div class="form-group">
+                        <label> Title </label>
+                        <input id="postTitle" asp-for="Title" class="form-control" />
+                        <span asp-validation-for="Title" class="text-warning"></span>
+                    </div>
+                    <div class="form-group">
+                        <label> Category </label>
+                        <select class="form-control" asp-for="Category" id="select">
+                            @for(var i = 0; i < ViewBag.CategoryNames.Length; i++) { 
+                                <option value="@i">@ViewBag.CategoryNames[i]</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Create Post!" class="btn btn-success" />
+                    </div>
+                </fieldset>
+
+
             </div>
-            <div class="form-group">
-                <label> Text </label>
-                <input id="postText" asp-for="Text" class="form-control" />
-                <span asp-validation-for="Text" class="text-muted"></span>
-            </div>
-            <div class="form-group">
-                <label> Youtube URL </label>
-                <input id="postURL" asp-for="VideoURL" class="form-control" />
-                <span asp-validation-for="VideoURL" class="text-muted"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create Post!" class="btn btn-success" />
-            </div>
-        </fieldset>
-        
-    </form>
-</div>
-<div class="col-md-6 col-md-offset-3 col-xs-10 col-xs-offset-1">
-        @Html.Partial("WebPostPartial")
-        @*<div style="margin-top:20px; background-color:#4E5D6C;">
-            <div class="webpost_date bg-dark">
-                <span class="day">@DateTime.UtcNow.Day  </span>
-                <span class="month">@DateTime.UtcNow.ToString("MMM") </span>
-                <span class="year">@DateTime.UtcNow.Year </span>
-            </div>
-            <div class="bg-primary webpost_title">
-                <h2 id="previewTitle"> </h2>
-            </div>
-            <div style="margin:10px;">
-                <span id="previewText"> </span>
-                <div class="text-center">
-                    <iframe id ="previewURL" width="420" height="315" src="" frameborder="0" allowfullscreen></iframe>
+            <div class="col-md-6 col-md-offset-0 col-xs-6 col-xs-offset-0">
+                <div class="well well">
+                    <div class="text-center" style="-ms-word-break: break-all; word-break: break-all;">
+                        <h4>Elements</h4>
+                        <table id="elements-table" class="table table-striped">
+                            <tbody data-bind="foreach: elements">
+                                <tr>
+                                    @*<td style="width:150px;">
+                                        <textarea data-bind="text: name" class="form-control" asp-for="DisplayOrder"></textarea>
+                                    </td>*@
+                                    <td>
+                                        @*<input class="form-control" data-bind="visible: elementType() == 'Text' || elementType() == 'YoutubeURL' " />*@
+
+                                        @*<label data-bind="visible: elementType() != 'Text' && elementType() != 'YoutubeURL'" class="btn btn-primary fa fa-upload" for="image-selector-" ></label>
+                                        <input name="Images" type="file" multiple style="display:none;">*@
+                                        
+                                        <input data-bind="value: elementType, enable: elementType() != 'Image/Gif' || uploadable() == true" class="form-control hidden" asp-for="DisplayOrder"/>
+                                        <textarea style="resize:vertical;" data-bind="visible: elementType() == 'Text', enable: elementType() == 'Text'" asp-for="Texts" class="form-control"></textarea>
+                                        <input data-bind="visible: elementType() == 'YoutubeURL', enable: elementType() == 'YoutubeURL'" asp-for="YoutubeURLs" class="form-control"/>
+                                        <input data-bind="visible: elementType() == 'Image/Gif', enable: elementType() == 'Image/Gif', event: {change: function(){setUploadable();}}" class="form-control" type="file" asp-for="Images" accept="image/*">
+                                        
+                                        
+                                    </td>
+                                    <td style="width:150px;">
+                                        <select class="form-control pull-right" data-bind="options: $root.availableTypes, value: elementType"></select>
+                                    </td>
+                                    <td style="width:30px;">
+                                        <label data-bind="click: $root.removeElement" class="btn btn-primary fa fa-times"></label>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <a data-bind="click: addElement" href="#" class="btn btn-primary">New Element</a>
+                    </div>
                 </div>
             </div>
-        </div>*@
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12 col-xs-offset-0">
+                @Html.Partial("WebPostPartial")
+            </div>
+        </div>
+    </form>
 </div>
 @*<script type="text/javascript" src="~/js/postpreview.js"></script>*@

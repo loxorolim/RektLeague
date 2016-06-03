@@ -76,6 +76,7 @@ namespace TheWorld
                 .AddDbContext<WebPostContext>();
             services.AddTransient<WebPostContextSeedData>();
             services.AddTransient<UserProfile>();
+            services.AddTransient<WebPostBR>();
             services.AddScoped<IWebPostRepository, WebPostRepository>();
         }
 
@@ -90,13 +91,20 @@ namespace TheWorld
             Mapper.Initialize(config =>
             {
                 config.CreateMap<WebPost, WebPostViewModel>().ReverseMap();
+
+               // config.CreateMap<string, PostText>()
+               // .ForMember(dest => dest.PostString, opt => opt.MapFrom(so => so));
+
+               // config.CreateMap<IFormFile, PostFile>()
+               //.ForMember(dest => dest.PostBytes, opt => opt.MapFrom(so => Config.getIFormFileBytes(so)));
+
             });
             app.UseMvc(config =>
             {
                 config.MapRoute(
                     name: "Default",
                     template: "{controller}/{action}/{id?}",
-                    defaults: new { controller = "App", action = "Index" }
+                    defaults: new { controller = "App", action = "WebPosts", id="1" }
                     );
             });
             await seeder.EnsureSeedDataAsync();

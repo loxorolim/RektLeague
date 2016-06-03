@@ -1,54 +1,95 @@
 @model TheWorld.Models.WebPost
 @{
-    int day = DateTime.UtcNow.Day; var month = DateTime.UtcNow.ToString("MMM"); int year = DateTime.UtcNow.Year ; var title = ""; var text = ""; var url = ""; int postId = -1;
-
+    int day = DateTime.UtcNow.Day; var month = DateTime.UtcNow.ToString("MMM"); int year = DateTime.UtcNow.Year; var title = ""; var text = ""; var url = ""; int postId = -1;
     if (@Model != null)
     {
         day = @Model.PublicationDate.Day;
         month = @Model.PublicationDate.ToString("MMM");
         year = @Model.PublicationDate.Year;
         title = @Model.Title;
-        text = Model.Text;
+        text = Model.MainText;
         url = @Model.VideoURL;
         postId = @Model.Id;
     }
-
 }
+<div class="webpost">
+    <div class="row">
+        <div>
+            <div style="margin-top:20px; background-color:#4E5D6C;">
 
-<div class="row">
-    <div>
-        <div style="margin-top:20px; background-color:#4E5D6C;">
-
-            <div class="webpost_date bg-dark">
-                <span class="day">@day</span>
-                <span class="month">@month</span>
-                <span class="year">@year</span>
-            </div>
-            <div class="bg-primary webpost_title" id="previewTitle" resize>@title
-                @*<h2 id="previewTitle">@title</h2>*@
-            </div>
-            @if (Model != null){
-                if (User.Identity.IsAuthenticated && User.IsInRole("admin")){
-                    <a class="webpost_remove btn btn-danger text-center" asp-controller="App" asp-action="RemovePost" asp-route-id= "@postId">X</a>
+                <div class="webpost_date bg-dark">
+                    <span class="day">@day</span>
+                    <span class="month">@month</span>
+                    <span class="year">@year</span>
+                </div>
+                <div class="bg-primary webpost_title" id="previewTitle" resize>
+                    <a asp-controller="App" asp-action="WebPost" asp-route-id="@postId" style="color:white; text-decoration: none">@title</a>
+                </div>
+                @if (Model != null)
+                {
+                    if (User.Identity.IsAuthenticated && User.IsInRole("admin"))
+                    {
+                        <a class="webpost_remove btn btn-danger text-center" asp-controller="App" asp-action="RemovePost" asp-route-id="@postId">X</a>
+                    }
                 }
-            }
+            </div>
         </div>
     </div>
-</div>
-<div class="row">
-    <div>
-        <div class="panel panel-default" style="margin:0 10px 10px 10px;">
-            <div class="well-lg webpost_text">
-                <span id="previewText" >@text</span>
-            </div>
-            <div class="well">
-                <div class="text-center">
-                    <div class="embed-responsive embed-responsive-4by3">
-                        <iframe id="previewURL" width="420" height="315" src=@url frameborder="0" allowfullscreen></iframe>
+    <div class="row">
+        <div>
+            <div class="panel panel-default" style="margin:0 10px 10px 10px;">
+                @{
+                    if (Model != null && Model.Elements != null)
+                    {
+                        foreach (var el in Model.Elements)
+                        {
+                            var imgSrc = "";
+                            if (el.PostBytes != null)
+                            {
+                                var base64 = Convert.ToBase64String(el.PostBytes);
+                                imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+                            }
+                            switch (el.ElementType)
+                            {
+                                case TheWorld.Models.Entry.EntryType.Image:
+                                    <div class="well-lg text-center">
+                                        <img src="@imgSrc" />
+                                    </div>
+                                    break;
+                                case TheWorld.Models.Entry.EntryType.Text:
+                                    string postText = el.PostString;
+                                    <div class="well-lg webpost_text">
+                                        <span id="previewText">@postText</span>
+                                    </div>
+                                    break;
+                                case TheWorld.Models.Entry.EntryType.YoutubeURL:
+                                    string postYoutubeURL = el.PostString;
+                                    <div class="well">
+                                        <div class="text-center">
+                                            <div class="embed-responsive embed-responsive-4by3">
+                                                <iframe id="previewURL" width="420" height="315" src=@postYoutubeURL frameborder="0" allowfullscreen></iframe>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    break;
+                                default:
+                                    break;
+
+                            }
+                        }
+                    }
+                }
+                <div class="well-lg webpost_text">
+                    <span id="previewText">@text</span>
+                </div>
+                <div class="well">
+                    <div class="text-center">
+                        <div class="embed-responsive embed-responsive-4by3">
+                            <iframe id="previewURL" width="420" height="315" src=@url frameborder="0" allowfullscreen></iframe>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
 </div>

@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Microsoft.AspNet.Http;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
@@ -9,6 +11,9 @@ namespace TheWorld
     public static class Config
     {
         private const int pageSize = 5;
+        public static readonly string[] categoryNames = {"Birdadas","Memes","Top Jogadas" };
+        //public enum categories { Birdadas, Memes, TopJogadas};
+
 
         public static int PageSize
         {
@@ -16,6 +21,22 @@ namespace TheWorld
             {
                 // simple default - no setter
                 return pageSize;
+            }
+        }
+        public static byte[] getIFormFileBytes(IFormFile file)
+        {
+            if (file != null)
+            {
+                Stream stream = file.OpenReadStream();
+                using (var memoryStream = new MemoryStream())
+                {
+                    stream.CopyTo(memoryStream);
+                    return memoryStream.ToArray();
+                }
+            }
+            else
+            {
+                return null;
             }
         }
         //public static string HashPassword(string password)

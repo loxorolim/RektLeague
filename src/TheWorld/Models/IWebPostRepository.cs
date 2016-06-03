@@ -8,6 +8,7 @@ namespace TheWorld
         
         IEnumerable<WebPost> GetAllWebPosts();
         IEnumerable<WebPost> GetWebPostsInPage(int page);
+        WebPost GetWebPostById(int id);
         WebPostList GetWebPostsList(int page);
         void AddWebPost(WebPost newWebPost);
         void RemoveWebPostById(int id);

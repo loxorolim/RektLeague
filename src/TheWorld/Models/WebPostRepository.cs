@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.Data.Entity;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -70,7 +71,7 @@ namespace TheWorld
             try
             {
                 WebPostList wpl = new WebPostList();
-                wpl.WebPosts = _context.WebPosts.OrderByDescending(t => t.Id).Skip((page - 1) * Config.PageSize).Take(Config.PageSize);
+                wpl.WebPosts = _context.WebPosts.OrderByDescending(t => t.Id).Skip((page - 1) * Config.PageSize).Take(Config.PageSize).Include(t => t.Elements);
                 wpl.TotalWebPostsSize = _context.WebPosts.Count();
                 wpl.MaxWebPostsPerSize = Config.PageSize;
                 return wpl;
@@ -78,6 +79,18 @@ namespace TheWorld
             catch (Exception ex)
             {
                 _logger.LogError("Could not get Web Posts List from database", ex);
+                return null;
+            }
+        }
+        public WebPost GetWebPostById(int id)
+        {
+            try
+            {
+                return _context.WebPosts.Include(t => t.Elements).First(i => i.Id == id);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Could not get Web Post from database", ex);
                 return null;
             }
         }

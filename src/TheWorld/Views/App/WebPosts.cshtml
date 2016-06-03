@@ -29,11 +29,11 @@
             <div><input type="submit" value="Add" class="btn btn-success" /></div>
         </form>
     </div>*@
-<div class="container">
+<div class="container-fluid">
 
     @foreach (var post in Model.WebPosts)
     {
-        <div class="col-md-8 col-md-offset-2 col-xs-10 col-xs-offset-1">
+        <div class="col-xs-12 col-xs-offset-0">
             @Html.Partial("WebPostPartial", post)
         </div>
 
